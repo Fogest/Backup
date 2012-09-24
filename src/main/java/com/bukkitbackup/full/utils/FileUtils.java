@@ -642,7 +642,7 @@ public class FileUtils {
     
     
     public static File[] listItemsInDir(File directory) {
-        return directory.list();
+        return directory.listFiles();
     }
 
     public static int getTotalFolderSize(File folder) {
