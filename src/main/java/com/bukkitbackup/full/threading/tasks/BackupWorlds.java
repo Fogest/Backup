@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 import org.bukkit.Server;
@@ -87,23 +86,16 @@ public class BackupWorlds {
 
         // Loops each world that needs to backed up, and do the required copies.
         while (!worldsToBackup.isEmpty()) {
+            
             String currentWorldName = worldsToBackup.removeFirst();
-            
-            // Save this world.
-            boolean notSaved = true;
-            while(notSaved) {
-                try {
-                    pluginServer.getWorld(currentWorldName).save();
-                } catch(Exception e) {
-                    LogUtils.sendLog("Encountered Exception Performing Save-All, Re-trying.");
-                } finally {
-                    notSaved = false;
-                }
-            }
-            
+
+            //pluginServer.getWorld(currentWorldName).save();
+
+
+
             // Get the current worlds seed.
             String worldSeed = String.valueOf(pluginServer.getWorld(currentWorldName).getSeed());
-            
+
             // Check for split backup.
             if (splitBackup) {
 
@@ -132,7 +124,7 @@ public class BackupWorlds {
 
                 // Check this backup folder exists.
                 FileUtils.checkFolderAndCreate(new File(thisWorldBackupFolder));
-                
+
                 // World seed backup.
                 if (backupSeeds) {
                     try {
@@ -145,7 +137,7 @@ public class BackupWorlds {
                         LogUtils.exceptionLog(ex, "Error saving level seed.");
                     }
                 }
-                
+
                 // Copy the current world into it's backup folder.
                 FileUtils.copyDirectory(worldContainer.concat(FILE_SEPARATOR).concat(currentWorldName), thisWorldBackupFolder.concat(FILE_SEPARATOR).concat(currentWorldName));
 
@@ -166,7 +158,7 @@ public class BackupWorlds {
 
                 // Create this folder.
                 FileUtils.checkFolderAndCreate(new File(copyDestination));
-                
+
                 // Bacup level seeds.
                 if (backupSeeds) {
                     try {
