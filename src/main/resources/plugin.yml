@@ -1,5 +1,5 @@
 name: Backup
-version: 2.1-dev
+version: 2.1
 description: A full and simple backup plugin.
 authors: [Meldanor, gamerx, lycano]
 website: http://www.bukkitbackup.com/
@@ -7,10 +7,10 @@ dev-url: http://dev.bukkit.org/server-mods/backup/
 main: com.bukkitbackup.full.BackupFull
 commands:
   backup:
-    description: Starts a backup of the server.
+    description: Manually starts a backup of the server.
     usage: "Usage: /backup [args]"
   bu:
-    description: Starts a backup of the server.
+    description: Manually starts a backup of the server.
     usage: "Usage: /bu [args]"
 permissions:
   backup.*:

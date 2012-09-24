@@ -15,6 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Backup - The simple server backup solution.
+ *
+ * @author Domenic Horner (gamerx)
+ */
 public class CommandHandler implements Listener, CommandExecutor {
 
     private PrepareBackup prepareBackup;
@@ -33,13 +38,12 @@ public class CommandHandler implements Listener, CommandExecutor {
      * @param settings Instance of the settings loader.
      * @param strings Instance of the strings loader.
      */
-    public CommandHandler(PrepareBackup prepareBackup, Plugin plugin, Settings settings, Strings strings, UpdateChecker updateChecker) {
+    public CommandHandler(PrepareBackup prepareBackup, Plugin plugin, Settings settings, Strings strings) {
         this.prepareBackup = prepareBackup;
         this.plugin = plugin;
         this.server = plugin.getServer();
         this.settings = settings;
         this.strings = strings;
-        this.updateChecker = updateChecker;
     }
 
     /**

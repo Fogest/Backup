@@ -83,5 +83,5 @@ ftpuploadcomplete    : 'FTP: Upload Complete.'
 ###############################################
 
 stringnotfound       : 'String not found - '
-packagedwith         : 2.1-dev
-version              : str-211
+packagedwith         : 2.1
+version              : str-215

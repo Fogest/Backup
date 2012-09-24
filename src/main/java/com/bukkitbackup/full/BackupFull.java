@@ -24,51 +24,46 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * BackupFull - Plugin Loader Class. This extends Bukkit's JavaPlugin class.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class BackupFull extends JavaPlugin {
 
-    public File mainDataFolder;
-    private String clientID;
-    private static Strings strings;
-    private static Settings settings;
+    // Class references.
+    public static BackupTask backupTask;
     private PrepareBackup prepareBackup;
-    private static UpdateChecker updateChecker;
-    public static BackupEverything backupEverything;
     public static BackupWorlds backupWorlds;
     public static BackupPlugins backupPlugins;
-    public static BackupTask backupTask;
+    public static BackupEverything backupEverything;
+    private static Settings settings;
+    private static Strings strings;
+    // Class parameters.
+    private File thisDataFolder;
+    private String clientUID;
 
     @Override
     public void onLoad() {
-        
-        // Initalize main data folder variable.
-        mainDataFolder = this.getDataFolder();
 
-        // Initalize logging utilities.
+        thisDataFolder = this.getDataFolder();
         LogUtils.initLogUtils(this);
-
-        // check and create main datafile.
-        FileUtils.checkFolderAndCreate(mainDataFolder);
+        FileUtils.checkFolderAndCreate(thisDataFolder);
 
         // Load configuration files.
-        strings = new Strings(new File(mainDataFolder, "strings.yml"));
-        settings = new Settings(new File(mainDataFolder, "config.yml"), strings);
+        strings = new Strings(new File(thisDataFolder, "strings.yml"));
+        settings = new Settings(new File(thisDataFolder, "config.yml"), strings);
 
         // Run version checking on configurations.
+        //@TODO Implement this correctly.
         strings.checkStringsVersion(settings.getStringProperty("requiredstrings", ""));
         settings.checkSettingsVersion(this.getDescription().getVersion());
 
-        // Complete initalization of LogUtils.
         LogUtils.finishInitLogUtils(settings.getBooleanProperty("displaylog", true), settings.getBooleanProperty("debugenabled", false));
 
-        // Load Metric Utils.
         try {
             MetricUtils metricUtils = new MetricUtils(this);
             metricUtils.start();
-            clientID = metricUtils.guid;
+            clientUID = metricUtils.guid;
         } catch (IOException ex) {
             LogUtils.exceptionLog(ex, "Exception loading metrics.");
         }
@@ -84,30 +79,22 @@ public class BackupFull extends JavaPlugin {
         // Check backup path.
         FileUtils.checkFolderAndCreate(new File(settings.getStringProperty("backuppath", "backups")));
 
-        //settings.isBackupTimed();
-
         // Setup backup tasks.
         backupEverything = new BackupEverything(settings);
         backupWorlds = new BackupWorlds(pluginServer, settings, strings);
         backupPlugins = new BackupPlugins(settings, strings);
         backupTask = new BackupTask(this, settings, strings);
 
-        // Initalize the update checker code.
-        updateChecker = new UpdateChecker(this.getDescription(), strings, clientID);
-
         // Create new "PrepareBackup" instance.
         prepareBackup = new PrepareBackup(this, settings, strings);
 
-
-
         // Initalize Command Listener.
-        getCommand("backup").setExecutor(new CommandHandler(prepareBackup, this, settings, strings, updateChecker));
-        getCommand("bu").setExecutor(new CommandHandler(prepareBackup, this, settings, strings, updateChecker));
+        getCommand("backup").setExecutor(new CommandHandler(prepareBackup, this, settings, strings));
+        getCommand("bu").setExecutor(new CommandHandler(prepareBackup, this, settings, strings));
 
         // Initalize Event Listener.
         EventListener eventListener = new EventListener(prepareBackup, this, settings, strings);
         pluginManager.registerEvents(eventListener, this);
-
 
         // Check if the main backup should run at specific times.
         String backupInterval = settings.getStringProperty("backupinterval", "15M").trim().toLowerCase();
@@ -221,7 +208,7 @@ public class BackupFull extends JavaPlugin {
 
         // Update & version checking loading.
         if (settings.getBooleanProperty("enableversioncheck", true)) {
-            pluginServer.getScheduler().scheduleAsyncDelayedTask(this, updateChecker);
+            pluginServer.getScheduler().scheduleAsyncDelayedTask(this, new UpdateChecker(this.getDescription(), strings, clientUID));
         }
 
         // Notify loading complete.

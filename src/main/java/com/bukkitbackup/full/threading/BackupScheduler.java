@@ -9,8 +9,9 @@ import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 
 /**
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class BackupScheduler implements Runnable {
 

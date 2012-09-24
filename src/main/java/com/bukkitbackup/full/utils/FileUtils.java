@@ -639,6 +639,11 @@ public class FileUtils {
         });
         return filesList;
     }
+    
+    
+    public static File[] listItemsInDir(File directory) {
+        return directory.list();
+    }
 
     public static int getTotalFolderSize(File folder) {
         int bytes = 0;

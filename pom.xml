@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bukkitbackup</groupId>
     <artifactId>Backup</artifactId>
-    <version>2.1-dev</version>
+    <version>2.1</version>
     <name>Backup</name>
     <description>A Backup plugin for Bukkit's Server mod API.</description>
     <url>https://github.com/gamerx/Backup</url>

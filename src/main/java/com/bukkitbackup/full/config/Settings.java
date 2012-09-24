@@ -8,28 +8,60 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- * Class for loading the configuration file.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public final class Settings {
 
-    private Strings strings;
-    private File configFile;
-    private FileConfiguration settings;
+    private static Strings strings;
+    private static File configFile;
+    private static FileConfiguration settings;
     public boolean useMaxSizeBackup = false;
 
     public Settings(File configFile, Strings strings) {
 
-        this.strings = strings;
-        this.configFile = configFile;
+        Settings.configFile = configFile;
+        Settings.strings = strings;
 
         try {
 
             // Checks if configuration file exists, creates it if it does not.
             if (!configFile.exists()) {
                 LogUtils.sendLog(strings.getString("newconfigfile"));
-                createDefaultSettings();
+                
+                BufferedReader bReader = null;
+                BufferedWriter bWriter = null;
+                String line;
+
+                try {
+
+                    // Open a stream to the configuration file in the jar, because we can only access over the class loader.
+                    bReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/resources/config.yml")));
+                    bWriter = new BufferedWriter(new FileWriter(configFile));
+
+                    // Writeout the new configuration file.
+                    while ((line = bReader.readLine()) != null) {
+                        bWriter.write(line);
+                        bWriter.newLine();
+                    }
+
+                } catch (Exception e) {
+                    LogUtils.exceptionLog(e, "Error opening stream.");
+                } finally {
+                    try {
+
+                        // Confirm the streams are closed.
+                        if (bReader != null) {
+                            bReader.close();
+                        }
+                        if (bWriter != null) {
+                            bWriter.close();
+                        }
+                    } catch (Exception e) {
+                        LogUtils.exceptionLog(e, "Error closing configuration stream.");
+                    }
+                }
             }
 
             // Initialize the configuration, and populate with settings.
@@ -38,45 +70,6 @@ public final class Settings {
 
         } catch (Exception e) {
             LogUtils.exceptionLog(e, "Failed to load configuration.");
-        }
-    }
-
-    /**
-     * Load the properties file from the JAR and place it in the backup DIR.
-     */
-    private void createDefaultSettings() {
-
-        BufferedReader bReader = null;
-        BufferedWriter bWriter = null;
-        String line;
-
-        try {
-
-            // Open a stream to the configuration file in the jar, because we can only access over the class loader.
-            bReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/resources/config.yml")));
-            bWriter = new BufferedWriter(new FileWriter(configFile));
-
-            // Writeout the new configuration file.
-            while ((line = bReader.readLine()) != null) {
-                bWriter.write(line);
-                bWriter.newLine();
-            }
-
-        } catch (Exception e) {
-            LogUtils.exceptionLog(e, "Error opening stream.");
-        } finally {
-            try {
-
-                // Confirm the streams are closed.
-                if (bReader != null) {
-                    bReader.close();
-                }
-                if (bWriter != null) {
-                    bWriter.close();
-                }
-            } catch (Exception e) {
-                LogUtils.exceptionLog(e, "Error closing configuration stream.");
-            }
         }
     }
 
@@ -91,18 +84,6 @@ public final class Settings {
         } else if (!configVersion.equals(requiredVersion)) {
             LogUtils.sendLog(strings.getString("configupdate"));
         }
-    }
-
-    /**
-     * Used to upgrade the configuration file.
-     */
-    public void doConfigurationUpgrade() {
-        LogUtils.sendLog(strings.getString("updatingconf"));
-        if (configFile.exists()) {
-            configFile.delete();
-        }
-        createDefaultSettings();
-        LogUtils.sendLog(strings.getString("updatingconf"));
     }
 
     /**
@@ -138,8 +119,6 @@ public final class Settings {
         return settings.getString(property, defaultString);
     }
 
-
-    
     /**
      * Method to convert human readable time, to minutes. - Checks string for no
      * automatic backup. - Checks for if only number (as minutes). - Checks for
@@ -193,11 +172,16 @@ public final class Settings {
         if (limitSetting.equals("-1") || limitSetting == null) {
             return 0;
         }
-        
+
         // If it is just a number, return minutes.
         if (limitSetting.matches("^[0-9]+$")) {
+            LogUtils.sendDebug("Max Backups: Amount (M:0011)");
+            
             return Integer.parseInt(limitSetting);
-        } else if (limitSetting.matches("[0-9]+[a-z]")) {
+        } else if (limitSetting.matches("^[0-9]+[a-z]$")) {
+            LogUtils.sendDebug("Max Backups: Size (M:0010)");
+            
+            useMaxSizeBackup = true;
             Pattern timePattern = Pattern.compile("^([0-9]+)[a-z]$");
             Matcher amountTime = timePattern.matcher(limitSetting);
             Pattern letterPattern = Pattern.compile("^[0-9]+([a-z])$");
@@ -205,7 +189,7 @@ public final class Settings {
             if (letterTime.matches() && amountTime.matches()) {
                 String letter = letterTime.group(1);
                 int bytes = Integer.parseInt(amountTime.group(1));
-                useMaxSizeBackup = true;
+                
                 if (letter.equals("k")) {
                     return bytes;
                 } else if (letter.equals("k")) {
@@ -223,6 +207,8 @@ public final class Settings {
                 return 0;
             }
         } else {
+             LogUtils.sendDebug("Max Backups: Unknown (M:0012)");
+            
             LogUtils.sendLog(strings.getString("checksizelimit"));
             return 0;
         }

@@ -12,11 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /**
- * This class determines if we should start a backup, and what settings to use
- * for the backup. Once it has determined to start a backup, it pushes one out
- * to a new thread.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class PrepareBackup implements Runnable {
 

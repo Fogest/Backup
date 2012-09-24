@@ -7,10 +7,9 @@ import java.net.URL;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
- * Class for checking for the latest version of Backup. It will report to the
- * user depending if it is out of date or not.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class UpdateChecker implements Runnable {
 

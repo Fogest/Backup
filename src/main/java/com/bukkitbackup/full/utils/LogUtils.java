@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Class used for all logging.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class LogUtils {
 

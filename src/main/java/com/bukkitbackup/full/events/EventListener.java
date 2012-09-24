@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Listens for login events, and perform actions based on what happened.
+ * Backup - The simple server backup solution.
  *
  * @author Domenic Horner (gamerx)
  */

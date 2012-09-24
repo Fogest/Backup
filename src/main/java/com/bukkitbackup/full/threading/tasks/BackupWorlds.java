@@ -17,9 +17,9 @@ import org.bukkit.Server;
 import org.bukkit.World;
 
 /**
- * Backup worlds when the function doWorlds() is called.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class BackupWorlds {
 
@@ -94,7 +94,7 @@ public class BackupWorlds {
             while(notSaved) {
                 try {
                     pluginServer.getWorld(currentWorldName).save();
-                } catch(ConcurrentModificationException cme) {
+                } catch(Exception e) {
                     LogUtils.sendLog("Encountered Exception Performing Save-All, Re-trying.");
                 } finally {
                     notSaved = false;

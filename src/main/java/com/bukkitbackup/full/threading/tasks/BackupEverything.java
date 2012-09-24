@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.FileFilter;
 
 /**
- * Backup all server files when the function doEverything() is called.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class BackupEverything {
 

@@ -10,9 +10,9 @@ import java.io.OutputStream;
 import sun.net.ftp.FtpClient;
 
 /**
- * The class provides the functionality to upload files to an FTP server.
+ * Backup - The simple server backup solution.
  *
- * @author Domenic Horner
+ * @author Domenic Horner (gamerx)
  */
 public class FTPUploader extends FtpClient implements Runnable {
 

@@ -165,5 +165,5 @@ enableversioncheck: true
 ##   Internal Settings (Read: DO NOT EDIT)   ##
 ###############################################
 
-requiredstrings: str-211
-version: 2.1-dev
+requiredstrings: str-215
+version: 2.1
