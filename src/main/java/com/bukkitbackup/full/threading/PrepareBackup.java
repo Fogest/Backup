@@ -102,15 +102,6 @@ public class PrepareBackup implements Runnable {
         } else {
             LogUtils.sendLog(strings.getString("backupoff"));
         }
-
-        // Check we should do a save-all.
-        if (settings.getBooleanProperty("alwayssaveall", false)) {
-            pluginServer.savePlayers();
-            for (World world : pluginServer.getWorlds()) {
-                world.save();
-            }
-            LogUtils.sendLog(strings.getString("alwayssaveall"));
-        }
     }
 
     /**
@@ -130,6 +121,11 @@ public class PrepareBackup implements Runnable {
         // Turn off auto-saving of worlds.
         for (World world : pluginServer.getWorlds()) {
             world.setAutoSave(false);
+        }
+        
+        // Perform final world save before backup.
+        for (World world : pluginServer.getWorlds()) {
+            world.save();
         }
 
         // Scedule the doBackup.

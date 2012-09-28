@@ -89,10 +89,6 @@ public class BackupWorlds {
             
             String currentWorldName = worldsToBackup.removeFirst();
 
-            //pluginServer.getWorld(currentWorldName).save();
-
-
-
             // Get the current worlds seed.
             String worldSeed = String.valueOf(pluginServer.getWorld(currentWorldName).getSeed());
 

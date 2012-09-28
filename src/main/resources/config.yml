@@ -32,10 +32,6 @@ backupemptyserver: false
 # If enabled, one backup will be performed at the time specified under backupinterval.
 norepeat: false
 
-## Option to always perform a /save-all on backup schedule. (Default: false)
-# If false, /save-all's are only performed when a backup is required.
-alwayssaveall: false
-
 ## If permissions system is un-available, should everyone be able to access all commands, or just ops? (Default: true)
 # If set to false, all players will be able to perform all commands, unless you use a permissions system.
 onlyops: true
