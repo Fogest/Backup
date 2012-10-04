@@ -5,51 +5,28 @@
 
 #======== Backup Settings ==========#
 
-## How often show the backup run? (Default: "15M" / 15 Minutes)
-# (Note: -1 or 0 will disable automatic backups.)
-# Format: [Time][M-Minutes, H-Hours, D-Days, W-Weeks]
-backupinterval: 15M
-# For setting absolute times, use this instead.
+## When and how often should the backup be run? (Default: "15M" / Every 15 Minutes)
+# (Note: -1 or 0 will disable automatic backups)
+# Format: (for interval-based) [Time][M-Minutes, H-Hours, D-Days, W-Weeks]
+# Format: (for time-based)  TA[02:00,06:00,10:00,14:00,18:00,22:00]
 # The example backs up at: 2AM, 6AM, 10AM, 2PM, 6PM, 10PM.
-#backupinterval: TA[02:00,06:00,10:00,14:00,18:00,22:00]
-
-## Enable scheduled save-all? (Default: "0" / Off)
-# (Note: -1 or 0 disables this feature.)
-# Format: [Time][M-Minutes, H-Hours, D-Days, W-Weeks]
-saveallinterval: 0
+backupinterval: 15M
 
 ## How many backups are retained? (Default: 25)
 # If this limit is hit, the oldest backup(s) will be removed.
-# (Note: -1 or 0 disables this feature.)
+# (Note: -1 or 0 disables this feature)
 # This can also be a max size, Format: [Size][K-KiloBytes, M-MegaBytes, G-GigaByes]
 maxbackups: 25
 
-## Should backups be performed on an empty server? (Default: false)
-# When the last player leaves the server, a final backup will be made. The automatic backup cycle will resume when a player re-joins.
-backupemptyserver: false
-
-## Should the backup stop the schedule after the first backup? (Default: false)
-# If enabled, one backup will be performed at the time specified under backupinterval.
-norepeat: false
-
-## If permissions system is un-available, should everyone be able to access all commands, or just ops? (Default: true)
-# If set to false, all players will be able to perform all commands, unless you use a permissions system.
-onlyops: true
-
-## Should the bypass node be ignored? (Default: false)
-# If this is true, even if all players have the "backup.bypass" permissions node, the backup will still continue.
-ignorebypass: false
-
-## Enables the auto-save function after the backup. (Defualt: true)
-# Note: If you set this to false, this plugin will backup your worlds but not save the data from the memory to your hard disc. If the server crashes between
-# backups, all work is lost. Disable if you use another plugin to save the world to disk (EG: autosave).
-enableautosave: true
+## Should backups only be performed with users online? (Default: true)
+# When the last player leaves the server, a final backup will be made.
+# The automatic backup cycle will resume when a player re-joins.
+onlyifonline: true
 
 ## Should we backup the entire folder? (Default: false)
 # Use with caution, as this will be a long, large backup, it automatically ignores the backup folder, so it can still be in the server folder.
 # Using this will ignore "backupworlds", "backupplugins", "skipworlds", "skipplugins", and "splitbackup"
-backupeverything: false
-
+fullbackup: false
 
 #======== File & Location Settings ==========#
 
@@ -57,13 +34,11 @@ backupeverything: false
 # Note: Path can be relative, or absolute. ('D:\Backups', '/var/backups', 'altbackups', and '~/backups' are all valid)
 backuppath: backups
 
-## Do we use the temp folder when doing backup? (Default: true)
-usetemp: true
-
-## Name for the temp folder. (Default: none)
-# This stores tempoary files while backup is in progress.
-# Note: Path can be relative, or absolute. ('D:\temp', '/tmp', 'temp', and '~/backups/temp' are all valid)
-# If this is not set, it defaults to a temp folder under the backups folder.
+## Tempoary folder settings. (Default: false/none)
+# These settings are for storing tempoary files while backup is in progress.
+# Note: Path can be relative or absolute. ('D:\temp', '/tmp', 'temp', and '~/backups/temp' are all valid)
+# If the folder name is not set, it defaults to a temp folder under the backups folder.
+usetempfolder: false
 tempfoldername:
 
 ## Whether to ZIP Backups or not. (Default: true)
@@ -74,47 +49,11 @@ zipbackup: true
 ## Should all the worlds be split into their own foders? (Default: false)
 splitbackup: false
 
+## @TODO Remove setting.
 ## Customize the date format for each backup. (Default: '%1$tY-%1$tm-%1$td-%1$tH-%1$tM-%1$tS' [YYYY-MM-DD-HH-MM-SS])
 # This has to be a Java String.format string, see
 # http://download.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html#syntax
 dateformat: '%1$tY-%1$tm-%1$td-%1$tH-%1$tM-%1$tS'
-
-#======== FTP Server Settings ==========#
-
-###########################################################
-##             !!!  Warning on FTP  !!!                  ##
-## This implementation relies on Sun's implemenentation  ##
-##  of the FTP protocol, and depending on the version    ##
-##  of Java you have installed, it may or may not work.  ##
-##     You need sun.net.ftp.FtpClient in your JRE.       ##
-##    Please tell me if this works/doesn't for you.      ##
-###########################################################
-
-
-## Should we enable FTP uploads? (Default: false)
-# If enabled, following options must be set.
-# zipbackup must be true for this to take effect.
-ftpuploadenable: false
-
-## The FTP server address to connect to. (Default: none)
-# Can be an IP address or a hostname.
-ftpserveraddress:
-
-## What port should we connect to on the server? (Default: 22)
-# The FTP default port is 21, if you're unsure, don't change this.
-ftpserverport: 21
-
-## The username to login to the FTP server with. (Default: none)
-ftpusername:
-
-## The password to login to the FTP server with. (Default: none)
-ftppassword:
-
-## The directory on the FTP server you would like backups stored in.  (Default: backups)
-# Please leave blank for the root directory.
-# This folder MUST exist on the FTP server, and will NOT be created!
-ftpdirectory: backups
-
 
 #======== Content Settings ==========#
 
@@ -122,10 +61,6 @@ ftpdirectory: backups
 # Will give warning if either is disabled.
 backupworlds: true
 backupplugins: true
-
-## Backup world seed values? (Default: true)
-# This will create a file in each world folder, containing the seed value.
-backupworldseed: true
 
 ## Worlds for the backup to skip. (Default: none)
 # Seperate by a semicolon. eg. world;world_nether
@@ -139,27 +74,19 @@ pluginlistmode: true
 # Seperate by a semicolon. eg. Plugin1;Plugin2;Plugin3. This takes effect inside plugins/
 pluginlist:
 
-#======== Notification & Logging Settings ==========#
-
-## Should we display messages in server/console log? (Default: true)
-# If false messages will only be logged to file.
-displaylog: true
+#======== Advanced Settings ==========#
 
 ## Should we enable debugging in the console? (Defualt: false)
 # This will also create a debug.log file in the data directory.
-debugenabled: false
-
-## Should we send messages in-game on backup complete. (Default: true)
-# False will only notify players with the "backup.notify" permission.
-notifyallplayers: true
+debugmode: false
 
 ## Enable online version checking? (Default: true)
-# Requires internet connectivity.
-enableversioncheck: true
+# This enabled checking for new plugin versions, it will download them automatically if it finds one.
+# Obviously, this requires internet connectivity.
+checkversion: true
 
 ###############################################
 ##   Internal Settings (Read: DO NOT EDIT)   ##
 ###############################################
 
-requiredstrings: str-215
-version: 2.1
+version: 3.0
