@@ -122,7 +122,7 @@ public class PrepareBackup implements Runnable {
         for (World world : pluginServer.getWorlds()) {
             world.setAutoSave(false);
         }
-        
+
         // Perform final world save before backup.
         for (World world : pluginServer.getWorlds()) {
             world.save();
@@ -133,7 +133,7 @@ public class PrepareBackup implements Runnable {
 
             @Override
             public void run() {
-                pluginServer.getScheduler().scheduleAsyncDelayedTask(plugin, BackupFull.backupTask);
+                pluginServer.getScheduler().runTaskAsynchronously(plugin, BackupFull.backupTask);
             }
         });
         isManualBackup = false;

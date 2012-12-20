@@ -30,36 +30,40 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class BackupFull extends JavaPlugin {
 
-    // Class references.
+    // Public variables for class comms.
+    private static PrepareBackup prepareBackup;
     public static BackupTask backupTask;
-    private PrepareBackup prepareBackup;
     public static BackupWorlds backupWorlds;
     public static BackupPlugins backupPlugins;
     public static BackupEverything backupEverything;
+    
+    // Private variables for this class.
     private static Settings settings;
     private static Strings strings;
-    // Class parameters.
     private File thisDataFolder;
     private String clientUID;
 
     @Override
     public void onLoad() {
 
+        // Set Data Folder, Init log utils.
         thisDataFolder = this.getDataFolder();
         LogUtils.initLogUtils(this);
         FileUtils.checkFolderAndCreate(thisDataFolder);
 
-        // Load configuration files.
+        // Setup Configuration Files.
         strings = new Strings(new File(thisDataFolder, "strings.yml"));
         settings = new Settings(new File(thisDataFolder, "config.yml"), strings);
 
         // Run version checking on configurations.
-        //@TODO Implement this correctly.
+        //@TODO Refactor Settings & Strings Loading Code.
         strings.checkStringsVersion(settings.getStringProperty("requiredstrings", ""));
         settings.checkSettingsVersion(this.getDescription().getVersion());
 
+        // Complete loading log utils.
         LogUtils.finishInitLogUtils(settings.getBooleanProperty("displaylog", true), settings.getBooleanProperty("debugenabled", false));
 
+        // BukkitMetrics Loading. (Not Plugin-Specific)
         try {
             MetricUtils metricUtils = new MetricUtils(this);
             metricUtils.start();
@@ -67,6 +71,7 @@ public class BackupFull extends JavaPlugin {
         } catch (IOException ex) {
             LogUtils.exceptionLog(ex, "Exception loading metrics.");
         }
+
     }
 
     @Override

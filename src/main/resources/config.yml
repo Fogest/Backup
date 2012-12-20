@@ -89,4 +89,4 @@ checkversion: true
 ##   Internal Settings (Read: DO NOT EDIT)   ##
 ###############################################
 
-version: 3.0
+version: 2.5-dev

@@ -169,18 +169,18 @@ public class BackupTask implements Runnable {
     private void deleteOldBackups() throws Exception {
 
         File backupDir = new File(backupPath);
-        
+
         LogUtils.sendDebug("Delete old backups. (M:0013)");
 
         if (splitBackup) { // Look inside the folders.
-            
+
             LogUtils.sendDebug("Delete old backups. - Split Backup (M:0014)");
-            
+
             // Check if we have a different container for worlds.
             if (!worldContainer.equals(".")) { // Custom.
 
                 LogUtils.sendDebug("Delete old backups. - Custom world container. (M:0015)");
-                
+
                 backupDir = new File(backupPath.concat(FILE_SEPARATOR).concat(worldContainer));
 
                 File[] worldFoldersToClean = backupDir.listFiles();
@@ -201,14 +201,14 @@ public class BackupTask implements Runnable {
                     }
                 }
             } else {
-                
+
                 LogUtils.sendDebug("Delete old backups. - Split backup. - No custom container. (M:0016)");
-                
+
                 File[] foldersToClean = backupDir.listFiles();
                 for (int l = 0; l < foldersToClean.length; l++) {
-                    
-                    
-                    
+
+
+
                     // Make sure we are cleaning a directory.
                     if (foldersToClean[l].isDirectory()) {
                         cleanFolder(foldersToClean[l]);
@@ -218,26 +218,26 @@ public class BackupTask implements Runnable {
 
 
         } else { // Clean entire directory.
-            
+
             LogUtils.sendDebug("Delete old backups.- Plain and simple (M:0017)");
-            
+
             cleanFolder(backupDir);
         }
     }
 
     private void cleanFolder(File folderToClean) throws IOException {
-        
-        LogUtils.sendDebug("Attempting to clean: "+folderToClean.toString()+" (M:0014)");
-        
+
+        LogUtils.sendDebug("Attempting to clean: " + folderToClean.toString() + " (M:0014)");
+
         try {
 
             // Get total backup limit.
             int backupLimit = settings.getBackupLimits();
             if (backupLimit != 0) {
-                
+
                 // List all the files inside this folder.
                 File[] filesList = FileUtils.listItemsInDir(folderToClean);
-                
+
                 LogUtils.sendDebug("Files: (M:0018)");
                 LogUtils.sendDebug(filesList.toString());
 
@@ -286,7 +286,7 @@ public class BackupTask implements Runnable {
                                 }
                                 backupList.remove(maxModifiedIndex);
                             }
-                            
+
                             FileUtils.deleteDirectory(backupList.get(0));
                             deletedList.add(backupList.get(0));
                         }
@@ -446,7 +446,7 @@ public class BackupTask implements Runnable {
 
         // This runs in another thread to ensure it does nto affect server performance.
         if (settings.getBooleanProperty("ftpuploadenable", false)) {
-            pluginServer.getScheduler().scheduleAsyncDelayedTask(plugin, new FTPUploader(settings, strings, ZIPFile));
+            pluginServer.getScheduler().runTaskAsynchronously(plugin, new FTPUploader(settings, strings, ZIPFile));
         }
     }
 }

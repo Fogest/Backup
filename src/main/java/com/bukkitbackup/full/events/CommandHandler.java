@@ -146,7 +146,7 @@ public class CommandHandler implements Listener, CommandExecutor {
         prepareBackup.isManualBackup = true;
 
         // Schedule an async task to run for the backup.
-        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, prepareBackup);
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, prepareBackup);
     }
 
     /**
@@ -173,7 +173,7 @@ public class CommandHandler implements Listener, CommandExecutor {
         messageSender(sender, strings.getString("gettingversions"));
 
         // Start a new asynchronous task to get version and print them.
-        server.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+        server.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
             @Override
             public void run() {
