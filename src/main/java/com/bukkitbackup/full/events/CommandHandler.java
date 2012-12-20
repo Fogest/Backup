@@ -146,7 +146,7 @@ public class CommandHandler implements Listener, CommandExecutor {
         prepareBackup.isManualBackup = true;
 
         // Schedule an async task to run for the backup.
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, prepareBackup);
+        plugin.getServer().getScheduler().runTask(plugin, prepareBackup);
     }
 
     /**
